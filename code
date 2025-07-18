@@ -1,0 +1,116 @@
+#include <iostream>
+#include <random>
+#include <vector>
+#include <format>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+
+string chiedi_testo() {
+    string input;
+    cin>>input;
+    return input;
+}
+
+vector<char> separatore(string messaggio_input) {
+    vector<char> lettere_separate;
+    for (char c : messaggio_input) {
+        lettere_separate.push_back(c);
+    }
+    return lettere_separate;
+}
+vector<char> convertitore(vector<int> numeri_casuali_generati,vector<char> stringa_finalizzata, const vector<char> &lettere_const) {
+    vector<char> output;
+    for ( int n= 0; n< numeri_casuali_generati.size();n++) {
+        int temp_var = numeri_casuali_generati[n];
+        output.push_back(lettere_const[temp_var]);
+    }
+    return output;
+}
+string debug1(vector<char> debug_var) {
+    for ( char n : debug_var) {
+        cout<<n<<endl;
+    }
+}
+void lato_utente_debug(vector<char> lettere) {
+    cout<<("vuoi sapere le singole lettere? s/n ")<<endl;
+    string risposta;
+    cin >> risposta;
+    while ( risposta != "s" && "S" && "n" && "N") {
+        cout << "Simbolo non accettato! Riprovare: "<<endl;
+        cin>>risposta;
+    }
+    if (risposta == "s"&& "S") {
+        string testo_debug= debug1(lettere);
+        cout<<testo_debug<<endl;
+    }
+    else if (risposta == "n" && "N") {
+        cout<<"Non verra stampato nulla"<<endl;
+    }
+}
+
+string stampa_chiave(vector<int> chiave_encr,string mes) {
+    for (int i=0; i< chiave_encr.size(); i++) {
+        mes += to_string(chiave_encr[i]);
+        if (i!=chiave_encr.size()-1) {
+            mes+=" ";
+        }
+    }
+  return mes;
+}
+void stampa_messaggio(vector<int> chiave , string mes) {
+
+    string temp_var = stampa_chiave(chiave, mes);
+    string messaggio_output= format("La tua chiave e : {}",temp_var);
+    cout << messaggio_output << endl;
+
+}
+void messaggio_finale(auto numeri_casuali_1, auto stringa_finale_1, auto lettere_1, auto chiave, auto mess) {
+
+    vector<char>test_to_var = convertitore(numeri_casuali_1, stringa_finale_1,lettere_1);
+
+    string password(test_to_var.begin(), test_to_var.end());
+
+    cout << "Password generata: " << password << endl;
+
+    stampa_messaggio(chiave,mess);
+
+
+}
+void altro_debug_solo_testo_convertito (auto numeri_casuali_1, auto stringa_finale_1, auto lettere_1) {
+    for (auto n  : convertitore(numeri_casuali_1, stringa_finale_1,lettere_1)) {
+        cout << n << endl;
+    }
+}
+int main() {
+    const vector<char> lettere = {
+        'A','b','C','d','E','f','G','h','I','j',
+        'K','l','M','n','O','p','Q','r','S','t',
+        'U','v','W','x','Y','z'
+    };
+
+    vector<int> key;
+    vector<int> numeri_casuali;
+    string messaggio;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distr(0, 25);
+
+    vector<char>    stringa_finale   = separatore(chiedi_testo());
+    // genera i numeri casuali in base alla lunghezza del testo dato (index chars)
+    for (int i=0; i< stringa_finale.size()  ; i++) {
+        int n_random= distr(gen);
+        numeri_casuali.push_back(n_random);
+        key.push_back(n_random);
+    }
+    messaggio_finale(numeri_casuali, stringa_finale,lettere,key,messaggio);
+
+    altro_debug_solo_testo_convertito(numeri_casuali, stringa_finale,lettere);
+
+
+    // debug funzione :: lato_utente_debug(test);
+    return 0;
+}
+//creare una stringa che ha tutte le lettere messe insieme
